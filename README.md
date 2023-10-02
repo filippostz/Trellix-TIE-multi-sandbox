@@ -1,4 +1,4 @@
-# McAfee TIE multi-sandbox integration
+# Trellix TIE multi-sandbox integration
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 
 This integration allows you to submit files from McAfee Threat Intelligence Exchange (TIE) to multiple sandboxes which allows better threat validation.
