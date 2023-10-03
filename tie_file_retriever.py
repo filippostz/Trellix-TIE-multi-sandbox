@@ -148,7 +148,8 @@ class Handler(BaseHTTPRequestHandler):
                 os.rename(filename, filename + "-" + str(md5))
                 logging.info("File {} cached".format(md5))
                 time.sleep(2)
-            os.remove(filename)
+            else:
+                os.remove(filename)
             if os.getenv("ATD_ENABLED") == "true":
                 sandboxes.append(ATD)
             if os.getenv("LASTLINE_ENABLED") == "true":
