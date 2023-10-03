@@ -1,5 +1,6 @@
 #!/usr/bin/env python3.7
 # Written by mohlcyber 31/10/2019 v.0.1
+# Edit by filippostz 03/10/2023
 
 import os
 import sys
@@ -14,16 +15,17 @@ import time
 import hashlib
 import logging
 
-from lastline import LASTLINE
-from atd import ATD
-from vmray_sandbox import VMRAY
-
 from http.server import HTTPServer, BaseHTTPRequestHandler
 
 from dotenv import load_dotenv
-
 load_dotenv(verbose=True)
 
+if os.getenv("ATD_ENABLED") == "true":
+    from atd import ATD
+if os.getenv("LASTLINE_ENABLED") == "true":
+    from lastline import LASTLINE
+if os.getenv("VMRAY_ENABLED") == "true":
+    from vmray_sandbox import VMRAY
 
 DEFAULT_LOG_LEVEL = "INFO"
 
@@ -110,8 +112,6 @@ class Handler(BaseHTTPRequestHandler):
             sha256 = hashlib.sha256(data).hexdigest()
             size = os.path.getsize(filename)
 
-            os.remove(filename)
-
             payload = {
                 "success": True,
                 "subId": 123456789,
@@ -144,6 +144,11 @@ class Handler(BaseHTTPRequestHandler):
             # Multi Sandbox Submission
             thread_list = []
             sandboxes = []
+            if os.getenv("DATALAKE_ENABLED") == "true":
+                os.rename(filename, filename + "-" + str(md5))
+                logging.info("File {} cached".format(md5))
+                time.sleep(2)
+            os.remove(filename)
             if os.getenv("ATD_ENABLED") == "true":
                 sandboxes.append(ATD)
             if os.getenv("LASTLINE_ENABLED") == "true":
